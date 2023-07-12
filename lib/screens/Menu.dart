@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:afourathon_flutter/screens/Driver/DriverPage.dart';
 
 class Menu extends StatefulWidget {
   const Menu({Key? key}) : super(key: key);
@@ -57,7 +58,7 @@ class _MenuState extends State<Menu> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    //Get.toNamed('/jobs');
+                    Get.to(DriverPage());
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
