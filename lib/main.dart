@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:afourathon_flutter/screens/Login.dart';
 import 'package:get/get.dart';
-import 'package:afourathon_flutter/services/routes.dart';
+import 'package:afourathon_flutter/services/Routes.dart';
 
 void main() {
   runApp(const MyApp());

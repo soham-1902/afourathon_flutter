@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:afourathon_flutter/widgets/CommonWidgets.dart';
+import 'package:afourathon_flutter/screens/Home.dart';
+import 'package:get/get.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -36,7 +38,11 @@ class _LoginState extends State<Login> {
                     ),
                   ]
                 ),
-                MainOrangeButton(initialTitle: 'Next', onPressed: () {}),
+                MainOrangeButton(
+                    initialTitle: 'Next', onPressed: () {
+                    Get.to(Home());
+                  }
+                ),
               ]
           ),
         ),
