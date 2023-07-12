@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:afourathon_flutter/widgets/CommonWidgets.dart';
+import 'package:afourathon_flutter/screens/Menu.dart';
+import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -55,7 +57,9 @@ class _HomeState extends State<Home> {
               ),
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(Menu());
+                  },
                   icon: const Icon(
                     Icons.menu,
                     color: Colors.white,
@@ -76,17 +80,13 @@ class _HomeState extends State<Home> {
                     ),
                     child: Row(
                       children: [
-                        const SizedBox(width: 16),
-                        const Icon(
-                          Icons.search,
-                          color: Color.fromRGBO(0, 0, 0, 1),
-                        ),
                         const SizedBox(width: 8),
                         Expanded(
                           child: TextField(
+                            enabled: false,
                             onChanged: (value) {},
                             decoration: const InputDecoration(
-                              hintText: 'Search',
+                              hintText: ' 🎊 Manage Cabs Seamlessly 🎊',
                               hintStyle: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
