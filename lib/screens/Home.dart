@@ -83,10 +83,11 @@ class _HomeState extends State<Home> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: TextField(
+                            textAlign: TextAlign.center,
                             enabled: false,
                             onChanged: (value) {},
                             decoration: const InputDecoration(
-                              hintText: ' 🎊 Manage Cabs Seamlessly 🎊',
+                              hintText: '🎊 Manage Cabs Seamlessly 🎊',
                               hintStyle: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -158,6 +159,11 @@ class _HomeState extends State<Home> {
                           color: Color(0xFF4F200D),
                         ),
                       ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+
                     ],
                   ),
                   Row(

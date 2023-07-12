@@ -4,8 +4,9 @@ class DriverCard extends StatelessWidget {
   final Function? onPressed;
   final String driverName;
   final String driverNumber;
+  final String index;
 
-  const DriverCard({Key? key, required this.onPressed, required this.driverName, required this.driverNumber}) : super(key: key);
+  const DriverCard({Key? key, required this.onPressed, required this.driverName, required this.driverNumber, required this.index}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class DriverCard extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          '1',
+                          index,
                           style: TextStyle(
                             fontSize: 16,
                             color: Color.fromRGBO(
