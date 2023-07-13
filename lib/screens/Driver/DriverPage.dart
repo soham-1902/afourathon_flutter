@@ -6,6 +6,7 @@ import 'package:afourathon_flutter/widgets/DriverWidgets.dart';
 
 import '../../widgets/CommonWidgets.dart';
 import 'CreateDriver.dart';
+import 'DriverDetails.dart';
 
 class DriverPage extends StatefulWidget {
   const DriverPage({Key? key}) : super(key: key);
@@ -72,7 +73,7 @@ class _DriverPageState extends State<DriverPage> {
                   'assets/back.svg',
                 ),
               ),
-              SizedBox(height:20,),
+              SizedBox(height: 20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
@@ -123,7 +124,6 @@ class _DriverPageState extends State<DriverPage> {
                 ),
               ),
               SizedBox(height: 10),
-              // DriverCard(onPressed: () {}, driverName: 'Aditya Mane', driverNumber: '9529664779', index: '1'),
               Expanded(
               child: Container(
                 height: Constants.getScreenHeight(context) * 0.81,
@@ -144,7 +144,17 @@ class _DriverPageState extends State<DriverPage> {
                             itemBuilder: (context, position) {
                               return GestureDetector(
                                 onTap: () {},
-                                child: DriverCard(onPressed: () {}, driverName: snapshot.data[position]['driverName'], driverNumber: snapshot.data[position]['driverPhone'], index: (position+1).toString()),
+                                child: DriverCard(onPressed: () {
+
+                                  Get.to(DriverDetails(
+                                    driverId: snapshot.data[position]['_id'],
+                                    driverName: snapshot.data[position]['driverName'],
+                                    driverPhone: snapshot.data[position]['driverPhone'],
+                                    driverEmail: snapshot.data[position]['driverEmail'],
+                                    assignedCab: snapshot.data[position]['cabRegistrationNumber'] ?? 'Cab not assigned',
+                                  ));
+
+                                }, driverName: snapshot.data[position]['driverName'], driverNumber: snapshot.data[position]['driverPhone'], index: (position+1).toString()),
                               );
                             },
                           );

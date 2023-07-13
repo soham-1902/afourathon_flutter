@@ -17,6 +17,16 @@ class DriversBackend {
     return driverData;
   }
 
+  assignCabToDriver(String driverId, ) async {
+    Map getapiData = {};
+    var driverData = await _performHttpRequest(
+        'PUT', 'driver/add_driver', getapiData
+    );
+
+    return driverData;
+  }
+
+
   getAllDrivers() async {
     Map getapiData = {};
     var driversData = await _performHttpRequest(
