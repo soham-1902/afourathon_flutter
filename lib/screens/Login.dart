@@ -21,26 +21,26 @@ class _LoginState extends State<Login> {
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   children: [
-                    BrownPageHeader(headerText: 'Login'),
-                    SizedBox(height: 150),
+                    const BrownPageHeader(headerText: 'Login'),
+                    const SizedBox(height: 150),
                     Column(
                         children: [
-                          OrangeTextField(thisTec: nameTec, hintText: 'Name'),
-                          SizedBox(height: 10),
-                          OrangeTextField(thisTec: emailTec, hintText: 'Email'),
+                          OrangeTextField(thisTec: nameTec, hintText: 'Name', textInputType: TextInputType.name,),
+                          const SizedBox(height: 10),
+                          OrangeTextField(thisTec: emailTec, hintText: 'Email', textInputType: TextInputType.emailAddress,),
                         ]
                     ),
                   ]
                 ),
                 MainOrangeButton(
                     initialTitle: 'Next', onPressed: () {
-                    Get.to(Home());
+                  Get.off(const Home());
                   }
                 ),
               ]
@@ -50,4 +50,3 @@ class _LoginState extends State<Login> {
     );
   }
 }
-

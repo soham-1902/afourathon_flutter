@@ -1,7 +1,11 @@
+import 'package:afourathon_flutter/backend/DriversBackend.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:afourathon_flutter/widgets/DriverWidgets.dart';
+
+import '../../widgets/CommonWidgets.dart';
+import 'CreateDriver.dart';
 
 class DriverPage extends StatefulWidget {
   const DriverPage({Key? key}) : super(key: key);
@@ -11,9 +15,43 @@ class DriverPage extends StatefulWidget {
 }
 
 class _DriverPageState extends State<DriverPage> {
+
+  Future<dynamic>? result = null;
+
+  getDriversData() async {
+    DriversBackend driversBackend = DriversBackend();
+
+    var data = await driversBackend.getAllDrivers();
+    bool? status = data['success'];
+    if (status == true) {
+      setState(() {
+        result = Future<dynamic>.value(data['data']);
+      });
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDriversData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.to(const CreateDriver());
+        },
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        backgroundColor: const Color.fromRGBO(255, 132, 0, 1),
+      ),
       resizeToAvoidBottomInset: false,
       body: Container(
         color: Colors.white,
@@ -37,7 +75,7 @@ class _DriverPageState extends State<DriverPage> {
               SizedBox(height:20,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: const [
                   Expanded(
                     child: Text(
                       'Drivers',
@@ -85,15 +123,15 @@ class _DriverPageState extends State<DriverPage> {
                 ),
               ),
               SizedBox(height: 10),
-              DriverCard(onPressed: () {}, driverName: 'Aditya Mane', driverNumber: '9529664779', index: '1'),
-              /*Expanded(
+              // DriverCard(onPressed: () {}, driverName: 'Aditya Mane', driverNumber: '9529664779', index: '1'),
+              Expanded(
               child: Container(
                 height: Constants.getScreenHeight(context) * 0.81,
                 width: Constants.getScreenWidth(context) * 1,
                 decoration: BoxDecoration(color: Colors.white),
                 child: RefreshIndicator(
                   color: Colors.orange,
-                  onRefresh: () => getExpensesData(),
+                  onRefresh: () => getDriversData(),
                   child: FutureBuilder(
                       future: result,
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -105,95 +143,8 @@ class _DriverPageState extends State<DriverPage> {
                             itemCount: snapshot.data.length,
                             itemBuilder: (context, position) {
                               return GestureDetector(
-                                onTap: () {
-                                  Get.to(ExpenseDetails(
-                                    itemId: snapshot.data[position]['_id'],
-                                    itemName: snapshot.data[position]['title'],
-                                    itemAmount: snapshot.data[position]
-                                    ['amount']
-                                        .toString(),
-                                  ));
-                                },
-                                child: Card(
-                                  elevation: 0.1,
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.only(bottom: 12.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              width: 35,
-                                              height: 35,
-                                              decoration: BoxDecoration(
-                                                color: const Color.fromRGBO(
-                                                    255, 132, 0, 0.08),
-                                                shape: BoxShape.circle,
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  (position + 1).toString(),
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Color.fromRGBO(
-                                                        255, 132, 0, 1),
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                    'Montserrat-Regular',
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 12,
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  snapshot.data[position]
-                                                  ['title'],
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                    'Montserrat-Regular',
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 6,
-                                                ),
-                                                Text(
-                                                  "₹" +
-                                                      snapshot.data[position]
-                                                      ['amount']
-                                                          .toString(),
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                      'Montserrat-Regular',
-                                                      fontSize: 10,
-                                                      fontWeight:
-                                                      FontWeight.w500),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Icon(
-                                          Icons.arrow_forward_ios_sharp,
-                                          size: 16,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                onTap: () {},
+                                child: DriverCard(onPressed: () {}, driverName: snapshot.data[position]['driverName'], driverNumber: snapshot.data[position]['driverPhone'], index: (position+1).toString()),
                               );
                             },
                           );
@@ -215,20 +166,10 @@ class _DriverPageState extends State<DriverPage> {
                       }),
                 ),
               ),
-            ),*/
+            ),
             ],
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          //Get.to(CreateExpenses());
-        },
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-        backgroundColor: const Color.fromRGBO(255, 132, 0, 1),
       ),
     );
   }

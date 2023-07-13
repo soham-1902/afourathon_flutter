@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:afourathon_flutter/widgets/CommonWidgets.dart';
 import 'package:afourathon_flutter/screens/Menu.dart';
 import 'package:get/get.dart';
 
@@ -114,7 +113,7 @@ class _HomeState extends State<Home> {
               context: context,
               builder: (context) => AlertDialog(
                 title: Text('Exit Confirmation'),
-                content: Text('Are you sure you want to exit?'),
+                content: const Text('Are you sure you want to exit?'),
                 actions: <Widget>[
                   TextButton(
                     child: Text(
@@ -138,7 +137,7 @@ class _HomeState extends State<Home> {
               ),
             );
 
-            return exit ?? false;
+            return exit;
           },
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 20, 0, 20),
