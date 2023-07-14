@@ -1,5 +1,62 @@
 import 'package:flutter/material.dart';
 
+class CabDashboardCard extends StatelessWidget {
+  final String cabRegNumber;
+  final String cabModelAndColor;
+
+  const CabDashboardCard({
+    Key? key,
+    required this.cabRegNumber,
+    required this.cabModelAndColor,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.car_rental_outlined,
+                  color: Colors.orangeAccent,
+                  size: 32,
+                ),
+                SizedBox(width: 8),
+                Text(
+                  cabModelAndColor,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 8),
+            Text(
+              cabRegNumber,
+              style: TextStyle(
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class CabCard extends StatelessWidget {
 
   final Function? onPressed;

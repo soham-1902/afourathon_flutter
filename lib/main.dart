@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       ),
       color: Color(0xFFFA9F42),
       title: 'Afourathon App',
-      initialRoute: '/login',
+      initialRoute: '/dashboard',
       getPages: appRoutes(),
       debugShowCheckedModeBanner: false,
     );

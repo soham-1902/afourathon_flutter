@@ -5,16 +5,16 @@ class CabsBackend {
 
   var ipAdd = 'http://192.168.1.9:3000/api/v4/';
 
-  createDriver(String driverName, String driverEmail, String driverPhone) async {
+  createCab(String cabRegistrationNumber, String cabModel, String cabColour) async {
     Map getapiData = {};
-    getapiData['driverName'] = driverName;
-    getapiData['driverEmail'] = driverEmail;
-    getapiData['driverPhone'] = driverPhone;
-    var driverData = await _performHttpRequest(
-        'POST', 'driver/add_driver', getapiData
+    getapiData['cabRegistrationNumber'] = cabRegistrationNumber;
+    getapiData['cabModel'] = cabModel;
+    getapiData['cabColour'] = cabColour;
+    var cabData = await _performHttpRequest(
+        'POST', 'cab/add_cab', getapiData
     );
 
-    return driverData;
+    return cabData;
   }
 
   assignCabToDriver(String driverId, ) async {

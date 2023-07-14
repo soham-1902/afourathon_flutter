@@ -1,7 +1,11 @@
+import 'package:afourathon_flutter/screens/Cab/CreateCab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:afourathon_flutter/widgets/CabWidgets.dart';
+
+import '../../backend/CabsBackend.dart';
+import '../../widgets/CommonWidgets.dart';
 
 class CabPage extends StatefulWidget {
   const CabPage({Key? key}) : super(key: key);
@@ -11,6 +15,29 @@ class CabPage extends StatefulWidget {
 }
 
 class _CabPageState extends State<CabPage> {
+  Future<dynamic>? result2 = null;
+
+  getCabsData() async {
+    CabsBackend cabsBackend = CabsBackend();
+
+    var data = await cabsBackend.getAllCabs();
+    bool? status = data['success'];
+    if (status == true) {
+      setState(() {
+        result2 = Future<dynamic>.value(data['data']);
+      });
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getCabsData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,144 +112,71 @@ class _CabPageState extends State<CabPage> {
                 ),
               ),
               SizedBox(height: 10),
-              CabCard(onPressed: () {}, cabNumber: 'MH06AB7778', cabModel: 'BMW', cabColour: 'Black', index: '1'),
-              /*Expanded(
-              child: Container(
-                height: Constants.getScreenHeight(context) * 0.81,
-                width: Constants.getScreenWidth(context) * 1,
-                decoration: BoxDecoration(color: Colors.white),
-                child: RefreshIndicator(
-                  color: Colors.orange,
-                  onRefresh: () => getExpensesData(),
-                  child: FutureBuilder(
-                      future: result,
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        if (snapshot.hasData &&
-                            snapshot.data != null &&
-                            snapshot.data!.isNotEmpty) {
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (context, position) {
-                              return GestureDetector(
-                                onTap: () {
-                                  Get.to(ExpenseDetails(
-                                    itemId: snapshot.data[position]['_id'],
-                                    itemName: snapshot.data[position]['title'],
-                                    itemAmount: snapshot.data[position]
-                                    ['amount']
-                                        .toString(),
-                                  ));
-                                },
-                                child: Card(
-                                  elevation: 0.1,
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.only(bottom: 12.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              width: 35,
-                                              height: 35,
-                                              decoration: BoxDecoration(
-                                                color: const Color.fromRGBO(
-                                                    255, 132, 0, 0.08),
-                                                shape: BoxShape.circle,
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  (position + 1).toString(),
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: Color.fromRGBO(
-                                                        255, 132, 0, 1),
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                    'Montserrat-Regular',
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 12,
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  snapshot.data[position]
-                                                  ['title'],
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                    'Montserrat-Regular',
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 6,
-                                                ),
-                                                Text(
-                                                  "₹" +
-                                                      snapshot.data[position]
-                                                      ['amount']
-                                                          .toString(),
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                      'Montserrat-Regular',
-                                                      fontSize: 10,
-                                                      fontWeight:
-                                                      FontWeight.w500),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Icon(
-                                          Icons.arrow_forward_ios_sharp,
-                                          size: 16,
-                                        )
-                                      ],
-                                    ),
+              Expanded(
+                child: Container(
+                  height: Constants.getScreenHeight(context) * 0.81,
+                  width: Constants.getScreenWidth(context) * 1,
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: RefreshIndicator(
+                    color: Colors.orange,
+                    onRefresh: () => getCabsData(),
+                    child: FutureBuilder(
+                        future: result2,
+                        builder: (BuildContext context, AsyncSnapshot snapshot) {
+                          if (snapshot.hasData &&
+                              snapshot.data != null &&
+                              snapshot.data!.isNotEmpty) {
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, position) {
+                                return GestureDetector(
+                                  onTap: () {},
+                                  child: CabCard(onPressed: () {
+
+                                    /*Get.to(DriverDetails(
+                                      driverId: snapshot.data[position]['driverId'],
+                                      driverName: snapshot.data[position]['driverName'],
+                                      driverPhone: snapshot.data[position]['driverPhone'],
+                                      driverEmail: snapshot.data[position]['driverEmail'],
+                                      assignedCab: snapshot.data[position]['cabRegistrationNumber'] ?? 'Cab not assigned',
+                                    ));*/
+
+                                  },
+                                    index: (position+1).toString(),
+                                    cabNumber: snapshot.data[position]['cabRegistrationNumber'],
+                                    cabModel: snapshot.data[position]['cabModel'],
+                                    cabColour: snapshot.data[position]['cabColour'],
                                   ),
-                                ),
-                              );
-                            },
-                          );
-                        } else if (snapshot.hasData &&
-                            snapshot.data.length == 0) {
+                                );
+                              },
+                            );
+                          } else if (snapshot.hasData &&
+                              snapshot.data.length == 0) {
+                            return Center(
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 50,),
+                                  SvgPicture.asset('assets/empty.svg'),
+                                  Text('Empty ! Create an expense')
+                                ],
+                              ),
+                            );
+                          }
                           return Center(
-                            child: Column(
-                              children: [
-                                SizedBox(height: 50,),
-                                SvgPicture.asset('assets/empty.svg'),
-                                Text('Empty ! Create an expense')
-                              ],
-                            ),
+                            child: CircularProgressIndicator(),
                           );
-                        }
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }),
+                        }),
+                  ),
                 ),
               ),
-            ),*/
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          //Get.to(CreateExpenses());
+          Get.to(const CreateCab());
         },
         child: Icon(
           Icons.add,

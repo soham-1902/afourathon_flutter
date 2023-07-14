@@ -1,3 +1,5 @@
+import 'package:afourathon_flutter/backend/CabsBackend.dart';
+import 'package:afourathon_flutter/widgets/CabWidgets.dart';
 import 'package:afourathon_flutter/widgets/DriverWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:afourathon_flutter/screens/Menu.dart';
@@ -17,6 +19,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Future<dynamic>? result = null;
+  Future<dynamic>? result2 = null;
 
   getDriversData() async {
     DriversBackend driversBackend = DriversBackend();
@@ -32,11 +35,26 @@ class _HomeState extends State<Home> {
     setState(() {});
   }
 
+  getCabsData() async {
+    CabsBackend cabsBackend = CabsBackend();
+
+    var data = await cabsBackend.getAllCabs();
+    bool? status = data['success'];
+    if (status == true) {
+      setState(() {
+        result2 = Future<dynamic>.value(data['data']);
+      });
+    }
+
+    setState(() {});
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getDriversData();
+    getCabsData();
   }
 
   @override
@@ -65,7 +83,7 @@ class _HomeState extends State<Home> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Hi,  User 👋',
+                    'Hi,  ' + widget.userName + ' 👋',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
@@ -238,6 +256,40 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                     ],
+                  ),
+                  FutureBuilder(
+                      future: result2,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if(snapshot.hasData && snapshot.data != null && snapshot.data!.isNotEmpty) {
+                          return Container(
+                            height: 130,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              physics: BouncingScrollPhysics(),
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, position) {
+                                return CabDashboardCard(
+                                  cabRegNumber: snapshot.data[position]['cabRegistrationNumber'],
+                                  cabModelAndColor: snapshot.data[position]['cabModel'] + ' ' + snapshot.data[position]['cabColour'],
+                                );
+                              },
+                            ),
+                          );
+                        } else if(!snapshot.hasData) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return Center(
+                          child: Column(
+                            children: [
+                              SvgPicture.asset('assets/empty.svg'),
+                              Text('Empty ! Create a purchase order')
+                            ],
+                          ),
+                        );
+                      }
                   ),
                 ],
               ),

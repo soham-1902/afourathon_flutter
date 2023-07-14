@@ -66,7 +66,6 @@ class DriverDashboardCard extends StatelessWidget {
   }
 }
 
-
 class DriverCard extends StatelessWidget {
   final Function? onPressed;
   final String driverName;
