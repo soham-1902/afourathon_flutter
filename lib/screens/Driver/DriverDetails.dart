@@ -273,7 +273,11 @@ class _DriverDetailsState extends State<DriverDetails> {
                               ),
                             );
                           } else {
-                            return CircularProgressIndicator();
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 10),
+                              child: Center(child: CircularProgressIndicator()),
+                            );
                           }
                       }
                   ),

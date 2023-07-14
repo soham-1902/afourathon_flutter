@@ -1,6 +1,10 @@
+import 'package:afourathon_flutter/widgets/DriverWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:afourathon_flutter/screens/Menu.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
+import 'package:afourathon_flutter/backend/DriversBackend.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -10,6 +14,29 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Future<dynamic>? result = null;
+
+  getDriversData() async {
+    DriversBackend driversBackend = DriversBackend();
+
+    var data = await driversBackend.getAllDrivers();
+    bool? status = data['success'];
+    if (status == true) {
+      setState(() {
+        result = Future<dynamic>.value(data['data']);
+      });
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getDriversData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,11 +187,43 @@ class _HomeState extends State<Home> {
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-
-                    ],
+                  SizedBox(height: 5,),
+                  FutureBuilder(
+                    future: result,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if(snapshot.hasData && snapshot.data != null && snapshot.data!.isNotEmpty) {
+                          return Container(
+                            height: 130,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              physics: BouncingScrollPhysics(),
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, position) {
+                                return DriverDashboardCard(
+                                    driverEmail: snapshot.data[position]['driverName'],
+                                    driverName: snapshot.data[position]['driverEmail'],
+                                    driverPhone: snapshot.data[position]['driverPhone']
+                                );
+                              },
+                            ),
+                          );
+                        } else if(!snapshot.hasData) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return Center(
+                          child: Column(
+                            children: [
+                              SvgPicture.asset('assets/empty.svg'),
+                              Text('Empty ! Create a purchase order')
+                            ],
+                          ),
+                        );
+                      }
                   ),
+                  SizedBox(height: 20,),
                   Row(
                     children: [
                       Text(

@@ -30,7 +30,7 @@ class _CreateDriverState extends State<CreateDriver> {
       );
     } else {
       Get.snackbar(
-        'An unexpected error occurred!',
+        'Error!',
         data['message'],
       );
     }
@@ -43,6 +43,7 @@ class _CreateDriverState extends State<CreateDriver> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 16, right: 28,top: 45, bottom: 20),

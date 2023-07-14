@@ -1,5 +1,72 @@
 import 'package:flutter/material.dart';
 
+class DriverDashboardCard extends StatelessWidget {
+  final String driverEmail;
+  final String driverName;
+  final String driverPhone;
+
+  const DriverDashboardCard({
+    Key? key,
+    required this.driverEmail,
+    required this.driverName,
+    required this.driverPhone,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.person,
+                  color: Colors.orangeAccent,
+                  size: 32,
+                ),
+                SizedBox(width: 8),
+                Text(
+                  driverName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 8),
+            Text(
+              '$driverEmail',
+              style: TextStyle(
+                fontSize: 14,
+              ),
+            ),
+            SizedBox(height: 4),
+            Text(
+              '$driverPhone',
+              style: TextStyle(
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
 class DriverCard extends StatelessWidget {
   final Function? onPressed;
   final String driverName;
@@ -19,7 +86,7 @@ class DriverCard extends StatelessWidget {
           elevation: 0.5,
           child: Padding(
             padding:
-            const EdgeInsets.symmetric(vertical: 12.0, horizontal: 4),
+            const EdgeInsets.symmetric(vertical: 4.0),
             child: Row(
               mainAxisAlignment:
               MainAxisAlignment.spaceBetween,
