@@ -19,11 +19,11 @@ class CabsBackend {
 
   assignDriverToCab(String driverId, String regNo) async {
     Map getapiData = {};
-    var driverData = await _performHttpRequest(
+    var cabData = await _performHttpRequest(
         'PUT', 'cab/assign_driver/$driverId/$regNo', getapiData
     );
 
-    return driverData;
+    return cabData;
   }
 
   getAllCabs() async {
