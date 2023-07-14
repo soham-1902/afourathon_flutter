@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import 'package:afourathon_flutter/backend/DriversBackend.dart';
 import '../../widgets/CommonWidgets.dart';
 
 class DriverDetails extends StatefulWidget {
@@ -28,6 +29,7 @@ class _DriverDetailsState extends State<DriverDetails> {
   late TextEditingController assignedCabTec;
 
   Future<dynamic>? allCabsData;
+  Future<dynamic>? resultOfAssignCab;
 
   String _dropDownValue = "Select Cab";
 
@@ -40,6 +42,19 @@ class _DriverDetailsState extends State<DriverDetails> {
       setState(() {
         allCabsData = Future<dynamic>.value(data['data']);
       });
+    }
+  }
+
+  assignCab() async {
+    DriversBackend driversBackend = DriversBackend();
+
+    var data = await driversBackend.assignCabToDriver(widget.driverId, _dropDownValue);
+
+    if (data['success'] == true) {
+      Get.back();
+      Get.snackbar('Success', data['message']);
+    } else {
+      Get.snackbar('Error', data['message']);
     }
   }
 
@@ -202,9 +217,16 @@ class _DriverDetailsState extends State<DriverDetails> {
                             List<dynamic> cabDataList = snapshot.data;
 
                             List<DropdownMenuItem<Object>> dropdownItems = cabDataList.map((item) {
-                              return DropdownMenuItem<Object>(
+                              return DropdownMenuItem<String>(
                                 value: item['cabRegistrationNumber'],
-                                child: Text(item['cabRegistrationNumber']),
+                                child: Text(
+                                  item['cabRegistrationNumber'],
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Montserrat-Regular',
+                                  ),
+                                ),
                               );
                             }).toList();
 
@@ -255,7 +277,6 @@ class _DriverDetailsState extends State<DriverDetails> {
                           }
                       }
                   ),
-
                 ],
               ),
               Container(
@@ -263,9 +284,10 @@ class _DriverDetailsState extends State<DriverDetails> {
                   child: MainOrangeButton(
                     initialTitle: 'Save',
                     onPressed: () async {
-
+                      await assignCab();
                     },
-                  ))
+                  )
+              )
             ],
           ),
         ),

@@ -147,7 +147,7 @@ class _DriverPageState extends State<DriverPage> {
                                 child: DriverCard(onPressed: () {
 
                                   Get.to(DriverDetails(
-                                    driverId: snapshot.data[position]['_id'],
+                                    driverId: snapshot.data[position]['driverId'],
                                     driverName: snapshot.data[position]['driverName'],
                                     driverPhone: snapshot.data[position]['driverPhone'],
                                     driverEmail: snapshot.data[position]['driverEmail'],
