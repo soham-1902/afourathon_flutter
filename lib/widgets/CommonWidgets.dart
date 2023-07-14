@@ -76,7 +76,7 @@ class BrownPageHeader extends StatelessWidget {
             color: Color(0xFF4F200D),
             fontFamily: 'ClashDisplay',
           ),
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.start,
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:afourathon_flutter/backend/CabsBackend.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,35 +21,27 @@ class DriverDetails extends StatefulWidget {
 }
 
 class _DriverDetailsState extends State<DriverDetails> {
-  /*updateExpenseDetails() async {
-
-    exp.Expenses myExp = exp.Expenses();
-    var Data = await myExp.updateExpense(
-      widget.itemId,
-      titleController.text,
-      amountController.text,
-    );
-
-    print('Expense Data $Data');
-    if (Data['status'] == true) {
-      print(Data['msg']);
-      Get.to(() => Expenses());
-      Get.snackbar(
-          'Success!', 'Your details saved successfully'
-      );
-    } else {
-      print(Data["status"]);
-      Get.snackbar(
-        'Error!',
-        Data['msg'],
-      );
-    }
-  }*/
 
   late TextEditingController driverNameTec;
   late TextEditingController driverEmailTec;
   late TextEditingController driverPhoneTec;
   late TextEditingController assignedCabTec;
+
+  Future<dynamic>? allCabsData;
+
+  String _dropDownValue = "Select Cab";
+
+  getAllCabs() async {
+    CabsBackend cabsBackend = CabsBackend();
+
+    var data = await cabsBackend.getAllCabs();
+    bool? status = data['success'];
+    if (status == true) {
+      setState(() {
+        allCabsData = Future<dynamic>.value(data['data']);
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -58,6 +51,8 @@ class _DriverDetailsState extends State<DriverDetails> {
     driverEmailTec = TextEditingController(text: widget.driverEmail);
     driverPhoneTec = TextEditingController(text: widget.driverPhone);
     assignedCabTec = TextEditingController(text: widget.assignedCab);
+
+    getAllCabs();
   }
 
   @override
@@ -197,6 +192,70 @@ class _DriverDetailsState extends State<DriverDetails> {
                     height: 1,
                     color: Color.fromRGBO(20, 20, 20, 0.37),
                   ),
+                  SizedBox(
+                    height: 14,
+                  ),
+                  FutureBuilder(
+                    future: allCabsData,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                          if(snapshot.hasData) {
+                            List<dynamic> cabDataList = snapshot.data;
+
+                            List<DropdownMenuItem<Object>> dropdownItems = cabDataList.map((item) {
+                              return DropdownMenuItem<Object>(
+                                value: item['cabRegistrationNumber'],
+                                child: Text(item['cabRegistrationNumber']),
+                              );
+                            }).toList();
+
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 10),
+                              child: SizedBox(
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 10),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: Color.fromRGBO(255, 132, 0, 0.08)),
+                                  child: DropdownButton(
+                                    menuMaxHeight: 400,
+                                    borderRadius: BorderRadius.circular(20),
+                                    hint: _dropDownValue == null
+                                        ? Text('Vendor Name')
+                                        : Text(
+                                      _dropDownValue,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat-Regular',
+                                      ),
+                                    ),
+                                    isExpanded: true,
+                                    iconSize: 30.0,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat-Regular',
+                                        color: Colors.black),
+                                    items: dropdownItems,
+                                    onChanged: (val) {
+                                      setState(
+                                            () {
+                                          _dropDownValue = val! as String;
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return CircularProgressIndicator();
+                          }
+                      }
+                  ),
+
                 ],
               ),
               Container(

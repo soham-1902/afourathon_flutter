@@ -19,7 +19,7 @@ class DriverCard extends StatelessWidget {
           elevation: 0.5,
           child: Padding(
             padding:
-            const EdgeInsets.symmetric(vertical: 12.0),
+            const EdgeInsets.symmetric(vertical: 12.0, horizontal: 4),
             child: Row(
               mainAxisAlignment:
               MainAxisAlignment.spaceBetween,

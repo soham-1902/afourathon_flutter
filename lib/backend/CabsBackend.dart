@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class DriversBackend {
+class CabsBackend {
 
   var ipAdd = 'http://localhost:3000/api/v4/';
 
@@ -26,12 +26,11 @@ class DriversBackend {
     return driverData;
   }
 
-
-  getAllDrivers() async {
+  getAllCabs() async {
     Map getapiData = {};
-    var driversData = await _performHttpRequest(
-        'GET', 'driver/get_all_drivers', getapiData);
-    return driversData;
+    var cabsData = await _performHttpRequest(
+        'GET', 'cab/get_all_cabs', getapiData);
+    return cabsData;
   }
 
   _performHttpRequest(String apiReq, String endUrl, Map getapidata) async {
@@ -49,5 +48,4 @@ class DriversBackend {
       return data;
     }
   }
-
 }
