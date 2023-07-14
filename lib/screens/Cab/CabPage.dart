@@ -1,3 +1,4 @@
+import 'package:afourathon_flutter/screens/Cab/CabDetails.dart';
 import 'package:afourathon_flutter/screens/Cab/CreateCab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -134,13 +135,7 @@ class _CabPageState extends State<CabPage> {
                                   onTap: () {},
                                   child: CabCard(onPressed: () {
 
-                                    /*Get.to(DriverDetails(
-                                      driverId: snapshot.data[position]['driverId'],
-                                      driverName: snapshot.data[position]['driverName'],
-                                      driverPhone: snapshot.data[position]['driverPhone'],
-                                      driverEmail: snapshot.data[position]['driverEmail'],
-                                      assignedCab: snapshot.data[position]['cabRegistrationNumber'] ?? 'Cab not assigned',
-                                    ));*/
+                                    Get.to(CabDetails(cabRegistrationNumber: snapshot.data[position]['cabRegistrationNumber'], cabModel: snapshot.data[position]['cabModel'], cabColour: snapshot.data[position]['cabColour'], isDriverAssigned: snapshot.data[position]['isAssigned'] ? 'Yes' : 'No'));
 
                                   },
                                     index: (position+1).toString(),

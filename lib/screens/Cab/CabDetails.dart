@@ -8,46 +8,43 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:afourathon_flutter/backend/DriversBackend.dart';
 import '../../widgets/CommonWidgets.dart';
 
-class DriverDetails extends StatefulWidget {
-  final String driverId;
-  final String driverName;
-  final String driverEmail;
-  final String driverPhone;
-  final String assignedCab;
+class CabDetails extends StatefulWidget {
+  final String cabRegistrationNumber;
+  final String cabModel;
+  final String cabColour;
+  final String isDriverAssigned;
 
-  const DriverDetails({Key? key, required this.driverId, required this.driverName, required this.driverEmail, required this.driverPhone, required this.assignedCab}) : super(key: key);
+  const CabDetails({Key? key, required this.cabRegistrationNumber, required this.cabModel, required this.cabColour, required this.isDriverAssigned}) : super(key: key);
 
   @override
-  State<DriverDetails> createState() => _DriverDetailsState();
+  State<CabDetails> createState() => _CabDetailsState();
 }
 
-class _DriverDetailsState extends State<DriverDetails> {
+class _CabDetailsState extends State<CabDetails> {
 
-  late TextEditingController driverNameTec;
-  late TextEditingController driverEmailTec;
-  late TextEditingController driverPhoneTec;
-  late TextEditingController assignedCabTec;
+  Future<dynamic>? allDriversData;
+  Future<dynamic>? resultOfAssign;
 
-  Future<dynamic>? allCabsData;
+  String _dropDownValue = "Select Driver";
 
-  String _dropDownValue = "Select Cab";
+  Map<String, String> driverPhoneAndId = {};
 
-  getAllCabs() async {
-    CabsBackend cabsBackend = CabsBackend();
+  getAllDrivers() async {
+    DriversBackend cabsBackend = DriversBackend();
 
-    var data = await cabsBackend.getAllCabs();
+    var data = await cabsBackend.getAllDrivers();
     bool? status = data['success'];
     if (status == true) {
       setState(() {
-        allCabsData = Future<dynamic>.value(data['data']);
+        allDriversData = Future<dynamic>.value(data['data']);
       });
     }
   }
 
-  assignCab() async {
-    DriversBackend driversBackend = DriversBackend();
+  assignDriver() async {
+    CabsBackend cabsBackend = CabsBackend();
 
-    var data = await driversBackend.assignCabToDriver(widget.driverId, _dropDownValue);
+    var data = await cabsBackend.assignDriverToCab(driverPhoneAndId[_dropDownValue]!, widget.cabRegistrationNumber);
 
     if (data['success'] == true) {
       Get.back();
@@ -57,16 +54,21 @@ class _DriverDetailsState extends State<DriverDetails> {
     }
   }
 
+  late TextEditingController cabRegistrationNumberTec;
+  late TextEditingController cabModelTec;
+  late TextEditingController cabColourTec;
+  late TextEditingController isAssignedTec;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    driverNameTec = TextEditingController(text: widget.driverName);
-    driverEmailTec = TextEditingController(text: widget.driverEmail);
-    driverPhoneTec = TextEditingController(text: widget.driverPhone);
-    assignedCabTec = TextEditingController(text: widget.assignedCab);
+    cabRegistrationNumberTec = TextEditingController(text: widget.cabRegistrationNumber);
+    cabModelTec = TextEditingController(text: widget.cabModel);
+    cabColourTec = TextEditingController(text: widget.cabColour);
+    isAssignedTec = TextEditingController(text: widget.isDriverAssigned);
 
-    getAllCabs();
+    getAllDrivers();
   }
 
   @override
@@ -92,7 +94,7 @@ class _DriverDetailsState extends State<DriverDetails> {
                   ),
                   SizedBox(height:20,),
                   Text(
-                    'Driver details',
+                    'Cab details',
                     style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
@@ -110,9 +112,9 @@ class _DriverDetailsState extends State<DriverDetails> {
                           enabled: false,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            labelText: 'Driver Name',
+                            labelText: 'Cab Registration Number',
                           ),
-                          controller: driverNameTec,
+                          controller: cabRegistrationNumberTec,
                           style: TextStyle(
                               fontFamily: 'Montserrat-SemiBold',
                               fontSize: 12,
@@ -137,9 +139,9 @@ class _DriverDetailsState extends State<DriverDetails> {
                           enabled: false,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            labelText: 'Phone Number',
+                            labelText: 'Cab Model',
                           ),
-                          controller: driverPhoneTec,
+                          controller: cabModelTec,
                           style: TextStyle(
                               fontFamily: 'Montserrat-SemiBold',
                               fontSize: 12,
@@ -164,9 +166,9 @@ class _DriverDetailsState extends State<DriverDetails> {
                           enabled: false,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            labelText: 'Email',
+                            labelText: 'Cab Colour',
                           ),
-                          controller: driverEmailTec,
+                          controller: cabColourTec,
                           style: TextStyle(
                               fontFamily: 'Montserrat-SemiBold',
                               fontSize: 12,
@@ -191,9 +193,9 @@ class _DriverDetailsState extends State<DriverDetails> {
                           enabled: false,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            labelText: 'Cab Assigned',
+                            labelText: 'Driver Assigned',
                           ),
-                          controller: assignedCabTec,
+                          controller: isAssignedTec,
                           style: TextStyle(
                               fontFamily: 'Montserrat-SemiBold',
                               fontSize: 12,
@@ -210,74 +212,78 @@ class _DriverDetailsState extends State<DriverDetails> {
                     height: 14,
                   ),
                   FutureBuilder(
-                    future: allCabsData,
+                      future: allDriversData,
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
-                          if(snapshot.hasData) {
-                            List<dynamic> cabDataList = snapshot.data;
+                        if(snapshot.hasData) {
+                          List<dynamic> driverDataList = snapshot.data;
 
-                            List<DropdownMenuItem<Object>> dropdownItems = cabDataList.map((item) {
-                              return DropdownMenuItem<String>(
-                                value: item['cabRegistrationNumber'],
-                                child: Text(
-                                  item['cabRegistrationNumber'],
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Montserrat-Regular',
-                                  ),
-                                ),
-                              );
-                            }).toList();
 
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 10),
-                              child: SizedBox(
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 10),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(15),
-                                      color: Color.fromRGBO(255, 132, 0, 0.08)),
-                                  child: DropdownButton(
-                                    menuMaxHeight: 400,
-                                    borderRadius: BorderRadius.circular(20),
-                                    hint: _dropDownValue == null
-                                        ? Text('Vendor Name')
-                                        : Text(
-                                      _dropDownValue,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Montserrat-Regular',
-                                      ),
-                                    ),
-                                    isExpanded: true,
-                                    iconSize: 30.0,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Montserrat-Regular',
-                                        color: Colors.black),
-                                    items: dropdownItems,
-                                    onChanged: (val) {
-                                      setState(
-                                            () {
-                                          _dropDownValue = val! as String;
-                                        },
-                                      );
-                                    },
-                                  ),
+                          List<DropdownMenuItem<Object>> dropdownItems = driverDataList.map((item) {
+
+                            driverPhoneAndId[item['driverPhone']] = item['driverId'];
+
+                            return DropdownMenuItem<String>(
+                              value: item['driverPhone'],
+                              child: Text(
+                                item['driverPhone'],
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Montserrat-Regular',
                                 ),
                               ),
                             );
-                          } else {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 10),
-                              child: Center(child: CircularProgressIndicator()),
-                            );
-                          }
+                          }).toList();
+
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 10),
+                            child: SizedBox(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: Color.fromRGBO(255, 132, 0, 0.08)),
+                                child: DropdownButton(
+                                  menuMaxHeight: 400,
+                                  borderRadius: BorderRadius.circular(20),
+                                  hint: _dropDownValue == null
+                                      ? Text('Vendor Name')
+                                      : Text(
+                                    _dropDownValue,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Montserrat-Regular',
+                                    ),
+                                  ),
+                                  isExpanded: true,
+                                  iconSize: 30.0,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Montserrat-Regular',
+                                      color: Colors.black),
+                                  items: dropdownItems,
+                                  onChanged: (val) {
+                                    setState(
+                                          () {
+                                        _dropDownValue = val! as String;
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          );
+                        } else {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 10),
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
                       }
                   ),
                 ],
@@ -287,7 +293,7 @@ class _DriverDetailsState extends State<DriverDetails> {
                   child: MainOrangeButton(
                     initialTitle: 'Save',
                     onPressed: () async {
-                      await assignCab();
+                      await assignDriver();
                     },
                   )
               )
