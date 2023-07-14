@@ -3,15 +3,29 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class DriversBackend {
+class Authentication {
 
   var ipAdd = 'http://192.168.1.9:3000/api/v4/';
 
-  login() async {
+  login(String email, String password) async {
     Map getapiData = {};
-    var driversData = await _performHttpRequest(
-        'GET', 'auth/login', getapiData);
-    return driversData;
+    getapiData['email'] = email;
+    getapiData['password'] = password;
+    var loginData = await _performHttpRequest(
+        'POST', 'auth/login', getapiData);
+    return loginData;
+  }
+
+  register(String name, String email, String password, String phone, String cnfPassword) async {
+    Map getapiData = {};
+    getapiData['name'] = name;
+    getapiData['email'] = email;
+    getapiData['password'] = password;
+    getapiData['phone'] = phone;
+    getapiData['cnfPassword'] = cnfPassword;
+    var loginData = await _performHttpRequest(
+        'POST', 'auth/register', getapiData);
+    return loginData;
   }
 
   _performHttpRequest(String apiReq, String endUrl, Map getapidata) async {
@@ -27,17 +41,8 @@ class DriversBackend {
     } else if (response.statusCode >= 400) {
 
       print('Bad data: $data');
-      Fluttertoast.showToast(
-          msg: "Something went wrong!\nPlease contact your admin",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
 
-      return {};
+      return data;
     }
   }
 

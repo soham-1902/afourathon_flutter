@@ -7,7 +7,9 @@ import 'package:get/get.dart';
 import 'package:afourathon_flutter/backend/DriversBackend.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final String userName;
+
+  const Home({Key? key, required this.userName}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -201,8 +203,8 @@ class _HomeState extends State<Home> {
                               itemCount: snapshot.data.length,
                               itemBuilder: (context, position) {
                                 return DriverDashboardCard(
-                                    driverEmail: snapshot.data[position]['driverName'],
-                                    driverName: snapshot.data[position]['driverEmail'],
+                                    driverEmail: snapshot.data[position]['driverEmail'],
+                                    driverName: snapshot.data[position]['driverName'],
                                     driverPhone: snapshot.data[position]['driverPhone']
                                 );
                               },

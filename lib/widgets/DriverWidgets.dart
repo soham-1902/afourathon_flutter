@@ -47,14 +47,14 @@ class DriverDashboardCard extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              '$driverEmail',
+              driverEmail,
               style: TextStyle(
                 fontSize: 14,
               ),
             ),
             SizedBox(height: 4),
             Text(
-              '$driverPhone',
+              driverPhone,
               style: TextStyle(
                 fontSize: 14,
               ),

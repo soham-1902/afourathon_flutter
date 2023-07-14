@@ -1,10 +1,16 @@
 import 'package:afourathon_flutter/screens/Login.dart';
 import 'package:get/get.dart';
 
+import '../screens/Home.dart';
+
 appRoutes() => [
   GetPage(
     name: '/login',
     page: () => Login(),
+  ),
+  GetPage(
+    name: '/dashboard',
+    page: () => Home(userName: 'User',),
   ),
 ];
 

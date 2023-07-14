@@ -15,7 +15,6 @@ class CreateDriver extends StatefulWidget {
 
 class _CreateDriverState extends State<CreateDriver> {
   createDriver() async {
-
     DriversBackend driversBackend = DriversBackend();
     var data = await driversBackend.createDriver(
       driverNameTec.text,
@@ -68,11 +67,11 @@ class _CreateDriverState extends State<CreateDriver> {
                   SizedBox(height:20,),
                   const BrownPageHeader(headerText: 'Create Driver'),
                   const SizedBox(height: 100),
-                  OrangeTextField(thisTec: driverEmailTec, hintText: 'Driver email', textInputType: TextInputType.emailAddress,),
+                  OrangeTextField(thisTec: driverEmailTec, hintText: 'Driver email', textInputType: TextInputType.emailAddress, obscureText: false,),
                   const SizedBox(height: 10),
-                  OrangeTextField(thisTec: driverNameTec, hintText: 'Driver name', textInputType: TextInputType.name,),
+                  OrangeTextField(thisTec: driverNameTec, hintText: 'Driver name', textInputType: TextInputType.name, obscureText: false,),
                   const SizedBox(height: 10),
-                  OrangeTextField(thisTec: driverPhoneTec, hintText: 'Driver phone', textInputType: TextInputType.phone,),
+                  OrangeTextField(thisTec: driverPhoneTec, hintText: 'Driver phone', textInputType: TextInputType.phone, obscureText: false,),
                 ],
               ),
               MainOrangeButton(

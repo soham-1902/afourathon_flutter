@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 class OrangeTextField extends StatelessWidget {
   final TextEditingController thisTec;
   final String hintText;
+  final bool obscureText;
   final TextInputType textInputType;
 
-  const OrangeTextField({Key? key, required this.thisTec, required this.hintText, required this.textInputType}) : super(key: key);
+  const OrangeTextField({Key? key, required this.thisTec, required this.hintText, required this.obscureText, required this.textInputType}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       child: TextFormField(
         keyboardType: textInputType,
+        obscureText: obscureText,
         controller: thisTec,
         style: TextStyle(
           fontSize: 16,
@@ -118,8 +120,8 @@ class MainOrangeButton extends StatelessWidget {
           foregroundColor: Colors.white,
           backgroundColor: const Color(0xFFFF8400),
         ),
-        onPressed: () {
-          onPressed!();
+        onPressed: () async {
+          await onPressed!();
         },
         child: Text(
           initialTitle,
